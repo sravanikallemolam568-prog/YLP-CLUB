@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSS Miyapur Gavel Club</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0D1B2A;--navy2:#1A2E42;--navy3:#243B52;
+  --gold:#C9A84C;--gold2:#E8C96A;--gold-light:#FDF6E3;
+  --teal:#2A9D8F;--teal-light:#E8F5F3;
+  --red:#E63946;--red-light:#FDECEA;
+  --green:#2DC653;--green-light:#E8F9ED;
+  --amber:#F4A261;--amber-light:#FEF3E8;
+  --bg:#F7F4EF;--surface:#FFFFFF;--surface2:#F2EFE9;--surface3:#E8E3DA;
+  --border:#DDD8CF;--border2:#CCC6BC;
+  --text:#1A1208;--text2:#5C5144;--text3:#9C8E7E;
+  --shadow:0 2px 8px rgba(13,27,42,0.08);
+  --shadow-md:0 4px 20px rgba(13,27,42,0.10);
+  --shadow-lg:0 8px 40px rgba(13,27,42,0.14);
+  --r:10px;--r-lg:16px;--r-xl:22px;
+  --sidebar:260px;
+}
+[data-theme="dark"] {
+  --bg:#0A0F16;--surface:#111820;--surface2:#18222E;--surface3:#1E2D3D;
+  --border:#253345;--border2:#2E3F52;
+  --text:#EDE8DF;--text2:#9CA8B4;--text3:#5A6A7A;
+  --gold-light:#1A1408;--teal-light:#0A1F1D;--red-light:#1A0608;
+  --green-light:#061A0C;--amber-light:#1A0E04;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+h1,h2,h3,h4{font-family:'DM Serif Display',serif}
+button{font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:'DM Sans',sans-serif}
+
+/* ── SPLASH ── */
+#splash {
+  position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--navy);overflow:hidden;transition:opacity 0.6s,visibility 0.6s;
+}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(201,168,76,0.12),transparent)}
+.splash-ring{position:absolute;width:500px;height:500px;border-radius:50%;border:1px solid rgba(201,168,76,0.1);top:50%;left:50%;transform:translate(-50%,-50%)}
+.splash-ring:nth-child(2){width:700px;height:700px;border-color:rgba(201,168,76,0.06)}
+.splash-seal{width:90px;height:90px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative;z-index:1;animation:pop 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.2s both}
+.splash-seal-inner{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--gold)}
+@keyframes pop{from{opacity:0;transform:scale(0.4)}to{opacity:1;transform:scale(1)}}
+.splash-title{font-family:'DM Serif Display',serif;font-size:2.6rem;color:#fff;text-align:center;line-height:1.2;margin-bottom:8px;position:relative;z-index:1;animation:fadeup 0.7s ease 0.5s both}
+.splash-sub{font-size:0.9rem;color:rgba(255,255,255,0.45);text-align:center;margin-bottom:40px;position:relative;z-index:1;animation:fadeup 0.7s ease 0.65s both;letter-spacing:0.08em;text-transform:uppercase}
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.splash-branches{display:flex;gap:10px;margin-bottom:40px;position:relative;z-index:1;animation:fadeup 0.7s ease 0.75s both}
+.splash-branch{padding:6px 16px;border-radius:50px;border:1px solid rgba(201,168,76,0.3);font-size:0.78rem;color:rgba(255,255,255,0.5);letter-spacing:0.06em}
+.splash-btn{position:relative;z-index:1;background:var(--gold);color:var(--navy);border-radius:50px;padding:14px 44px;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;transition:all 0.2s;box-shadow:0 4px 20px rgba(201,168,76,0.35);animation:fadeup 0.7s ease 0.85s both}
+.splash-btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,0.5)}
+
+/* ── AUTH ── */
+#auth{display:none;min-height:100vh;background:var(--bg);align-items:center;justify-content:center;flex-direction:column;padding:20px}
+.auth-card{width:400px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:40px 36px;box-shadow:var(--shadow-lg)}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.auth-logo-seal{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;color:var(--gold);font-size:0.9rem}
+.auth-logo-text{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text)}
+.auth-title{font-size:1.6rem;margin-bottom:6px;color:var(--text)}
+.auth-sub{font-size:0.83rem;color:var(--text3);margin-bottom:24px;line-height:1.5}
+.role-tabs{display:flex;background:var(--surface2);border-radius:var(--r);padding:3px;gap:3px;margin-bottom:20px}
+.role-tab{flex:1;padding:8px;border-radius:7px;font-size:0.78rem;font-weight:500;color:var(--text3);transition:all 0.15s;text-align:center}
+.role-tab.active{background:var(--surface);color:var(--text);font-weight:600;box-shadow:var(--shadow)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:0.72rem;font-weight:700;color:var(--text2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.field input,.field select{width:100%;padding:10px 13px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:0.9rem;outline:none;transition:all 0.15s}
+.field input:focus,.field select:focus{border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 3px rgba(201,168,76,0.12)}
+.auth-btn{width:100%;padding:12px;border-radius:var(--r);background:var(--navy);color:#fff;font-weight:700;font-size:0.9rem;margin-top:4px;transition:all 0.2s}
+.auth-btn:hover{background:var(--navy2)}
+.auth-toggle{text-align:center;margin-top:16px;font-size:0.82rem;color:var(--text3)}
+.auth-toggle span{color:var(--gold);font-weight:600;cursor:pointer}
+
+/* ── APP SHELL ── */
+#app{display:none;min-height:100vh}
+.shell{display:flex;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--navy);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:50;overflow-y:auto}
+.sb-header{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sb-seal{display:flex;align-items:center;gap:10px}
+.sb-seal-mark{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;color:var(--gold);font-size:0.82rem;flex-shrink:0}
+.sb-seal-text{font-family:'DM Serif Display',serif;font-size:0.95rem;color:#fff;line-height:1.2}
+.sb-seal-sub{font-size:0.66rem;color:rgba(255,255,255,0.4);letter-spacing:0.06em;text-transform:uppercase}
+.sb-user{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;color:var(--navy);flex-shrink:0}
+.sb-user-name{font-size:0.83rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.06em}
+.sb-nav{flex:1;padding:10px 8px}
+.sb-section{font-size:0.62rem;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;padding:10px 10px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:0.83rem;font-weight:500;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.15s;margin-bottom:1px}
+.sb-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
+.sb-item.active{background:rgba(201,168,76,0.15);color:var(--gold)}
+.sb-item svg{width:15px;height:15px;flex-shrink:0;opacity:0.7}
+.sb-item.active svg{opacity:1}
+.sb-footer{padding:12px 18px;border-top:1px solid rgba(255,255,255,0.08);display:flex;gap:8px}
+.sb-theme{padding:7px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.12);font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s;flex:1;text-align:center}
+.sb-theme:hover{border-color:var(--gold);color:var(--gold)}
+.sb-logout{padding:7px 12px;border-radius:7px;font-size:0.72rem;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.15s}
+.sb-logout:hover{color:#EF4444}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);flex:1;padding:28px 32px;max-width:calc(100vw - var(--sidebar))}
+.page{display:none}.page.active{display:block}
+.page-hd{margin-bottom:24px}
+.page-title{font-size:1.6rem;color:var(--text);margin-bottom:4px}
+.page-sub{font-size:0.83rem;color:var(--text3);line-height:1.5}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;box-shadow:var(--shadow)}
+.card-label{font-size:0.67rem;font-weight:700;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--shadow)}
+.stat-val{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1;color:var(--text)}
+.stat-lbl{font-size:0.72rem;font-weight:600;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;margin-top:6px}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--surface2);border-bottom:1px solid var(--border)}
+th{padding:10px 14px;text-align:left;font-size:0.67rem;font-weight:700;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase}
+td{padding:11px 14px;font-size:0.85rem;color:var(--text);border-bottom:1px solid var(--border)}
+tbody tr:last-child td{border:none}
+tbody tr{transition:background 0.12s}
+tbody tr:hover{background:var(--surface2)}
+.td-bold{font-weight:600}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:50px;font-size:0.68rem;font-weight:700;letter-spacing:0.04em}
+.bg{background:var(--green-light);color:#18A43A}
+.ba{background:var(--amber-light);color:#C86A10}
+.br{background:var(--red-light);color:#C0242F}
+.bb{background:var(--teal-light);color:var(--teal)}
+.bn{background:var(--surface2);color:var(--text3)}
+.bgold{background:var(--gold-light);color:#8A6A1A}
+[data-theme="dark"] .bg{color:#2DC653}[data-theme="dark"] .ba{color:#F4A261}
+[data-theme="dark"] .br{color:#E63946}[data-theme="dark"] .bb{color:var(--teal)}
+[data-theme="dark"] .bgold{color:var(--gold)}
+
+/* ── PROGRESS ── */
+.prog-track{height:6px;background:var(--surface3);border-radius:50px;overflow:hidden}
+.prog-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width 0.8s ease}
+
+/* ── SPEECH CELLS ── */
+.speech-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.speech-cell{border:1px solid var(--border);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--surface)}
+.speech-cell:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.speech-cell.done{background:var(--green-light);border-color:#86EFAC}
+.speech-cell.active{background:var(--gold-light);border-color:var(--gold)}
+.sc-num{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text);margin-bottom:4px}
+.sc-lbl{font-size:0.65rem;font-weight:600;color:var(--text3);line-height:1.3}
+.sc-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);margin:0 auto 5px}
+.speech-cell.done .sc-dot{background:var(--green)}
+.speech-cell.active .sc-dot{background:var(--gold);box-shadow:0 0 5px rgba(201,168,76,0.5)}
+[data-theme="dark"] .speech-cell.done{border-color:#166534}
+
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:0.68rem;font-weight:700;color:var(--text2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.fi{width:100%;padding:9px 12px;border-radius:var(--r);border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:0.87rem;outline:none;transition:all 0.15s}
+.fi:focus{border-color:var(--gold);background:var(--surface);box-shadow:0 0 0 3px rgba(201,168,76,0.1)}
+.fta{resize:vertical;min-height:80px}
+.btn{padding:9px 20px;border-radius:var(--r);font-size:0.83rem;font-weight:600;transition:all 0.15s;cursor:pointer}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold2)}
+.btn-sm{padding:6px 13px;font-size:0.75rem}
+.btn-outline{border:1px solid var(--border2);color:var(--text2);background:none}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── MEETING ROLES ── */
+.role-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:50px;font-size:0.75rem;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text2);margin:3px;cursor:pointer;transition:all 0.15s}
+.role-chip:hover{border-color:var(--gold);color:var(--gold)}
+.role-chip.filled{background:var(--gold-light);border-color:var(--gold);color:#6B4F0F}
+[data-theme="dark"] .role-chip.filled{color:var(--gold)}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border:none}
+.tl-time{font-size:0.75rem;font-weight:700;color:var(--gold);width:48px;flex-shrink:0;padding-top:2px}
+.tl-content{flex:1}
+.tl-label{font-size:0.85rem;font-weight:600;color:var(--text)}
+.tl-detail{font-size:0.75rem;color:var(--text3);margin-top:2px}
+.tl-dur{font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:50px;background:var(--surface2);color:var(--text3)}
+
+/* ── ATTENDANCE DOTS ── */
+.att-dots{display:flex;gap:4px;flex-wrap:wrap}
+.att-dot{width:9px;height:9px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all 0.15s}
+.att-dot.present{background:var(--green)}
+.att-dot.informed{background:var(--amber)}
+.att-dot.absent{background:var(--red)}
+.att-dot:hover{transform:scale(1.3)}
+
+/* ── MEMBER CARD ── */
+.member-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;transition:all 0.15s;cursor:pointer}
+.member-card:hover{box-shadow:var(--shadow-md);border-color:var(--border2)}
+.mc-avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1rem;color:var(--gold);flex-shrink:0}
+.mc-name{font-size:0.95rem;font-weight:600;color:var(--text)}
+.mc-detail{font-size:0.73rem;color:var(--text3);margin-top:2px}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border-radius:var(--r-xl);padding:28px;width:540px;max-width:92vw;box-shadow:var(--shadow-lg);transform:translateY(16px) scale(0.97);transition:all 0.22s cubic-bezier(0.34,1.56,0.64,1)}
+.overlay.open .modal{transform:none}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:1.2rem;color:var(--text)}
+.modal-close{width:28px;height:28px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text3);cursor:pointer;font-size:1rem}
+.modal-close:hover{background:var(--red-light);color:var(--red)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 18px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;min-width:260px;transform:translateY(120%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.toast.show{transform:translateY(0)}
+.toast-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
+.toast-title{font-size:0.83rem;font-weight:600;color:var(--text)}
+.toast-msg{font-size:0.75rem;color:var(--text3)}
+
+/* ── BRANCH TABS ── */
+.branch-tabs{display:flex;gap:6px;margin-bottom:18px}
+.branch-tab{padding:7px 18px;border-radius:50px;font-size:0.8rem;font-weight:600;border:1px solid var(--border);color:var(--text3);background:var(--surface);cursor:pointer;transition:all 0.15s}
+.branch-tab.active,.branch-tab:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* ── SEARCH ── */
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:8px 13px;margin-bottom:16px;box-shadow:var(--shadow)}
+.search-wrap input{flex:1;background:none;border:none;outline:none;font-size:0.87rem;color:var(--text)}
+.search-wrap input::placeholder{color:var(--text3)}
+
+/* ── GRID LAYOUTS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.members-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mt-2{margin-top:8px}.mt-3{margin-top:14px}.mt-4{margin-top:20px}.mt-6{margin-top:28px}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:14px}.mb-4{margin-bottom:20px}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}
+.text-sm{font-size:0.8rem}.text-xs{font-size:0.7rem}.text-muted{color:var(--text3)}.fw6{font-weight:600}
+
+/* ── MINI PROG ── */
+.mini-prog{display:flex;align-items:center;gap:7px;min-width:100px}
+.mini-track{flex:1;height:4px;background:var(--surface3);border-radius:50px;overflow:hidden}
+.mini-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:50px;transition:width 0.6s}
+
+/* ── ROLE TRACKER TABLE ── */
+.role-count{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:700;font-size:0.78rem}
+[data-theme="dark"] .role-count{background:var(--surface3)}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:48px 20px;color:var(--text3)}
+.empty-state-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-state-title{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.empty-state-sub{font-size:0.83rem}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){.stat-row{grid-template-columns:repeat(2,1fr)}.speech-grid{grid-template-columns:repeat(3,1fr)}.form-grid{grid-template-columns:1fr}.members-grid{grid-template-columns:repeat(2,1fr)}.g2,.g3,.g4{grid-template-columns:1fr}}
+@media(max-width:660px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.stat-row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- ── SPLASH ── -->
+<div id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-ring"></div><div class="splash-ring"></div>
+  <div class="splash-seal"><div class="splash-seal-inner">G</div></div>
+  <div class="splash-title">PSS Miyapur<br>Gavel Club</div>
+  <div class="splash-sub">Administration Platform</div>
+  <div class="splash-branches">
+    <div class="splash-branch">Miyapur</div>
+    <div class="splash-branch">GHMC</div>
+    <div class="splash-branch">MKR</div>
+  </div>
+  <button class="splash-btn" onclick="showAuth()">Enter Platform →</button>
+</div>
+
+<!-- ── AUTH ── -->
+<div id="auth" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-seal">G</div>
+      <div class="auth-logo-text">Gavel Club</div>
+    </div>
+    <h2 class="auth-title" id="auth-title">Welcome back</h2>
+    <p class="auth-sub" id="auth-sub">Sign in to access the club platform.</p>
+    <div class="role-tabs">
+      <div class="role-tab active" onclick="setRole('member',this)">Member</div>
+      <div class="role-tab" onclick="setRole('ec',this)">EC Officer</div>
+      <div class="role-tab" onclick="setRole('president',this)">President</div>
+    </div>
+    <div id="reg-name" style="display:none">
+      <div class="field"><label>Full Name</label><input class="fi" id="f-name" placeholder="Your full name"></div>
+    </div>
+    <div class="field"><label>Email</label><input class="fi" id="f-email" placeholder="email@example.com"></div>
+    <div class="field"><label>Password</label><input class="fi" type="password" id="f-pass" placeholder="••••••••"></div>
+    <button class="auth-btn" id="auth-submit" onclick="doAuth()">Sign In</button>
+    <div class="auth-toggle" id="auth-toggle">No account? <span onclick="toggleAuthMode()">Register</span></div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app" style="display:none">
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-header">
+    <div class="sb-seal">
+      <div class="sb-seal-mark">G</div>
+      <div>
+        <div class="sb-seal-text">Gavel Club</div>
+        <div class="sb-seal-sub">PSS Miyapur</div>
+      </div>
+    </div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-avatar" id="sb-av">AK</div>
+    <div>
+      <div class="sb-user-name" id="sb-nm">Member</div>
+      <div class="sb-user-role" id="sb-rl">Member</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <div class="sb-item active" onclick="nav('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+    </div>
+    <div class="sb-item" onclick="nav('members',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Members
+    </div>
+    <div class="sb-item" onclick="nav('speeches',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Speech Tracker
+    </div>
+    <div class="sb-item" onclick="nav('meetings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Meetings
+    </div>
+    <div class="sb-item" onclick="nav('roles',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>Role Tracker
+    </div>
+    <div class="sb-item" onclick="nav('attendance',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Attendance
+    </div>
+    <div class="sb-section ec-only" style="display:none">EC Tools</div>
+    <div class="sb-item ec-only" style="display:none" onclick="nav('register',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>Register Member
+    </div>
+    <div class="sb-item ec-only" style="display:none" onclick="nav('mentor',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Mentor Assign
+    </div>
+    <div class="sb-item ec-only" style="display:none" onclick="nav('agenda',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Meeting Agenda
+    </div>
+    <div class="sb-item ec-only" style="display:none" onclick="nav('ecsettings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>EC Settings
+    </div>
+  </nav>
+  <div class="sb-footer">
+    <button class="sb-theme" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+    <button class="sb-logout" onclick="doLogout()">Sign out</button>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ── DASHBOARD ── -->
+<div class="page active" id="page-dashboard">
+  <div class="page-hd">
+    <h1 class="page-title" id="dash-greeting">Good morning</h1>
+    <p class="page-sub">PSS Miyapur Gavel Club — Administration Platform</p>
+  </div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-val" id="ds-members">0</div><div class="stat-lbl">Total Members</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--gold)" id="ds-speeches">0</div><div class="stat-lbl">Speeches Completed</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--teal)" id="ds-meetings">0</div><div class="stat-lbl">Meetings Held</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--green)" id="ds-att">—</div><div class="stat-lbl">Avg Attendance</div></div>
+  </div>
+  <div class="g2 mt-4">
+    <div>
+      <div class="card mb-4">
+        <div class="card-label">Branch Distribution</div>
+        <div id="branch-dist"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Recent Activity</div>
+        <div id="recent-acts"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-4">
+        <div class="card-label">EC Committee</div>
+        <div id="ec-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Next Meeting</div>
+        <div id="next-meeting"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MEMBERS ── -->
+<div class="page" id="page-members">
+  <div class="page-hd flex items-center justify-between">
+    <div><h1 class="page-title">Members</h1><p class="page-sub">All registered Gavel Club members across branches.</p></div>
+    <button class="btn btn-gold" onclick="nav('register',null)">+ Register</button>
+  </div>
+  <div class="branch-tabs">
+    <div class="branch-tab active" onclick="filterBranch('all',this)">All Branches</div>
+    <div class="branch-tab" onclick="filterBranch('Miyapur',this)">Miyapur</div>
+    <div class="branch-tab" onclick="filterBranch('GHMC',this)">GHMC</div>
+    <div class="branch-tab" onclick="filterBranch('MKR',this)">MKR</div>
+  </div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input placeholder="Search member name, class, school…" oninput="searchMembers(this.value)">
+  </div>
+  <div class="members-grid" id="members-grid"></div>
+</div>
+
+<!-- ── SPEECH TRACKER ── -->
+<div class="page" id="page-speeches">
+  <div class="page-hd"><h1 class="page-title">Speech Progress Tracker</h1><p class="page-sub">Track each member's 10-speech Gavel Club journey. VPE manages all records.</p></div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input placeholder="Search member to view their speech progress…" oninput="speechSearch(this.value)" id="speech-search-input">
+  </div>
+  <div id="speech-member-view">
+    <div class="empty-state">
+      <div class="empty-state-icon">🎤</div>
+      <div class="empty-state-title">Select a member to view their speech progress</div>
+      <div class="empty-state-sub">Type a name above or view the table below</div>
+    </div>
+  </div>
+  <div class="mt-4">
+    <div class="card-label mb-3">All Members — Speech Progress</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Member</th><th>Branch</th><th>Mentor</th><th>Progress</th><th>Completed</th><th>Action</th></tr></thead>
+        <tbody id="speech-all-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── MEETINGS ── -->
+<div class="page" id="page-meetings">
+  <div class="page-hd flex items-center justify-between">
+    <div><h1 class="page-title">Meetings</h1><p class="page-sub">Planned meetings with role assignments and agenda.</p></div>
+    <button class="btn btn-gold ec-btn" onclick="openNewMeeting()">+ Plan Meeting</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Branch</th><th>Speeches</th><th>Roles Assigned</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="meetings-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── ROLE TRACKER ── -->
+<div class="page" id="page-roles">
+  <div class="page-hd"><h1 class="page-title">Role Tracker</h1><p class="page-sub">Track how many times each member has performed each meeting role.</p></div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input placeholder="Search member…" oninput="filterRoleTable(this.value)">
+  </div>
+  <div class="tbl-wrap">
+    <table id="role-table">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Gavelier</th>
+          <th>Topic Master</th>
+          <th>Evaluator</th>
+          <th>Timer</th>
+          <th>Ah-Counter</th>
+          <th>Listener</th>
+          <th>Photo/Video</th>
+          <th>Gen. Evaluator</th>
+          <th>Activity Master</th>
+          <th>Sergeant</th>
+        </tr>
+      </thead>
+      <tbody id="role-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── ATTENDANCE ── -->
+<div class="page" id="page-attendance">
+  <div class="page-hd"><h1 class="page-title">Attendance</h1><p class="page-sub">Member attendance across all meetings. Secretary manages records.</p></div>
+  <div class="flex items-center gap-3 mb-4" style="flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px">
+      <input type="date" id="att-date" class="fi" style="border:none;background:none;padding:0;width:130px;font-weight:600" onchange="loadAttDate()">
+    </div>
+    <button class="btn btn-gold btn-sm ec-btn" onclick="saveAtt()">Save</button>
+    <button class="btn btn-outline btn-sm ec-btn" onclick="markAllAtt('present')">✓ All Present</button>
+    <button class="btn btn-outline btn-sm ec-btn" onclick="markAllAtt('absent')">✕ All Absent</button>
+  </div>
+  <div class="g4 mb-4">
+    <div class="stat" style="padding:14px 16px"><div class="stat-val" style="font-size:1.6rem;color:var(--green)" id="att-present">0</div><div class="stat-lbl">Present</div></div>
+    <div class="stat" style="padding:14px 16px"><div class="stat-val" style="font-size:1.6rem;color:var(--amber)" id="att-informed">0</div><div class="stat-lbl">Informed</div></div>
+    <div class="stat" style="padding:14px 16px"><div class="stat-val" style="font-size:1.6rem;color:var(--red)" id="att-absent">0</div><div class="stat-lbl">Uninformed</div></div>
+    <div class="stat" style="padding:14px 16px"><div class="stat-val" style="font-size:1.6rem" id="att-total">0</div><div class="stat-lbl">Total</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Member</th><th>Branch</th><th>Present</th><th>Informed Absent</th><th>Uninformed Absent</th></tr></thead>
+      <tbody id="att-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── REGISTER MEMBER ── -->
+<div class="page" id="page-register">
+  <div class="page-hd"><h1 class="page-title">Register New Member</h1><p class="page-sub">Add a new member to the club roster. VPM manages registrations.</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-label mb-3">Member Information</div>
+      <div class="form-grid">
+        <div class="fg"><label>Full Name</label><input class="fi" id="r-name" placeholder="Full name"></div>
+        <div class="fg"><label>Age</label><input class="fi" id="r-age" type="number" placeholder="Age"></div>
+        <div class="fg"><label>Gender</label><select class="fi" id="r-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+        <div class="fg"><label>Mobile</label><input class="fi" id="r-mobile" placeholder="10-digit number" maxlength="10"></div>
+        <div class="fg"><label>Class / Year</label><input class="fi" id="r-class" placeholder="e.g. Class 10 / 2nd Year"></div>
+        <div class="fg"><label>School / College</label><input class="fi" id="r-school" placeholder="Institution name"></div>
+        <div class="fg"><label>Branch</label><select class="fi" id="r-branch"><option>Miyapur</option><option>GHMC</option><option>MKR</option></select></div>
+        <div class="fg"><label>Assign Mentor</label><select class="fi" id="r-mentor"><option value="">Select mentor…</option></select></div>
+      </div>
+      <div class="card-label mb-3 mt-4">Parent / Guardian</div>
+      <div class="form-grid">
+        <div class="fg"><label>Parent Name</label><input class="fi" id="r-pname" placeholder="Parent full name"></div>
+        <div class="fg"><label>Parent Mobile</label><input class="fi" id="r-pmobile" placeholder="10-digit number"></div>
+        <div class="fg"><label>Parent Age</label><input class="fi" id="r-page" type="number" placeholder="Age"></div>
+        <div class="fg"><label>Parent Gender</label><select class="fi" id="r-pgender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+      </div>
+      <button class="btn btn-gold mt-3" onclick="registerMember()">Register Member</button>
+    </div>
+    <div class="card">
+      <div class="card-label mb-3">Recently Registered</div>
+      <div id="recent-reg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MENTOR ASSIGN ── -->
+<div class="page" id="page-mentor">
+  <div class="page-hd"><h1 class="page-title">Mentor Assignment</h1><p class="page-sub">Assign senior members as mentors to junior members for each speech.</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-label mb-3">Assign Mentor</div>
+      <div class="fg"><label>Junior Member</label><select class="fi" id="ma-junior"><option value="">Select member…</option></select></div>
+      <div class="fg"><label>Assign Mentor (Senior)</label><select class="fi" id="ma-mentor"><option value="">Select mentor…</option></select></div>
+      <div class="fg"><label>For Speech</label><select class="fi" id="ma-speech">
+        <option value="all">All Speeches</option>
+        <option value="1">Speech 1 — Ice Breaker</option>
+        <option value="2">Speech 2 — Organizing Your Speech</option>
+        <option value="3">Speech 3 — Get to the Point</option>
+        <option value="4">Speech 4 — How to Say It</option>
+        <option value="5">Speech 5 — Your Body Speaks</option>
+        <option value="6">Speech 6 — Vocal Variety</option>
+        <option value="7">Speech 7 — Research Your Topic</option>
+        <option value="8">Speech 8 — Visual Aids</option>
+        <option value="9">Speech 9 — Persuade with Power</option>
+        <option value="10">Speech 10 — Inspire Your Audience</option>
+      </select></div>
+      <button class="btn btn-gold" onclick="assignMentor()">Assign Mentor</button>
+    </div>
+    <div class="card">
+      <div class="card-label mb-3">Current Assignments</div>
+      <div id="mentor-assignments"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MEETING AGENDA ── -->
+<div class="page" id="page-agenda">
+  <div class="page-hd"><h1 class="page-title">Meeting Agenda Builder</h1><p class="page-sub">Plan the 2-hour meeting agenda and assign roles.</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-label mb-3">Meeting Details</div>
+      <div class="fg"><label>Meeting Date</label><input type="date" class="fi" id="ag-date"></div>
+      <div class="fg"><label>Branch</label><select class="fi" id="ag-branch"><option>Miyapur</option><option>GHMC</option><option>MKR</option></select></div>
+      <div class="fg"><label>Start Time</label><input type="time" class="fi" id="ag-time" value="10:00"></div>
+      <div class="card-label mb-2 mt-3">Assign Roles</div>
+      <div id="role-assign-form"></div>
+      <button class="btn btn-gold mt-3" onclick="saveMeeting()">Save Meeting Plan</button>
+    </div>
+    <div class="card">
+      <div class="card-label mb-3">Agenda Timeline (2 hours)</div>
+      <div class="timeline" id="agenda-timeline"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── EC SETTINGS ── -->
+<div class="page" id="page-ecsettings">
+  <div class="page-hd"><h1 class="page-title">EC Committee Settings</h1><p class="page-sub">Enter the names of your Executive Committee members. Shown on the dashboard.</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-label mb-3">EC Member Names</div>
+      <div id="ec-settings-form"></div>
+      <button class="btn btn-gold mt-3" onclick="saveECSettings()">Save EC Names</button>
+    </div>
+    <div class="card">
+      <div class="card-label mb-3">Preview</div>
+      <div id="ec-preview"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+</div>
+
+<!-- SPEECH MODAL -->
+<div class="overlay" id="speech-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-hd"><h3 class="modal-title" id="sm-title">Speech Progress</h3><div class="modal-close" onclick="closeModal()">✕</div></div>
+    <div id="sm-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="t-icon" style="background:var(--green-light)">✓</div>
+  <div><div class="toast-title" id="t-title">Done</div><div class="toast-msg" id="t-msg"></div></div>
+</div>
+
+<script>
+
+// ══ CONSTANTS ══
+const SPEECH_PROJECTS = [
+  {num:1,title:'Ice Breaker',time:'3–4 min'},
+  {num:2,title:'Organizing Your Speech',time:'4–5 min'},
+  {num:3,title:'Get to the Point',time:'4–5 min'},
+  {num:4,title:'How to Say It',time:'4–5 min'},
+  {num:5,title:'Your Body Speaks',time:'4–5 min'},
+  {num:6,title:'Vocal Variety',time:'4–5 min'},
+  {num:7,title:'Research Your Topic',time:'4–5 min'},
+  {num:8,title:'Get Comfortable with Visual Aids',time:'4–5 min'},
+  {num:9,title:'Persuade with Power',time:'4–5 min'},
+  {num:10,title:'Inspire Your Audience',time:'4–5 min'},
+];
+const MEETING_ROLES = [
+  {code:'A',name:'Sergeant'},
+  {code:'B',name:'Gavelier'},
+  {code:'C',name:'Topic Master'},
+  {code:'D',name:'Evaluator'},
+  {code:'E',name:'Timer'},
+  {code:'F',name:'Ah-Counter'},
+  {code:'G',name:'Listener'},
+  {code:'H',name:'Videographer'},
+  {code:'I',name:'General Evaluator'},
+  {code:'J',name:'Activity Master'},
+];
+const EC = [
+  {role:'President',name:'—',badge:'bgold'},
+  {role:'VP Education',name:'—',badge:'bb'},
+  {role:'VP Membership',name:'—',badge:'bg'},
+  {role:'VP PR',name:'—',badge:'ba'},
+  {role:'Secretary',name:'—',badge:'bb'},
+  {role:'Joint Secretary',name:'—',badge:'bn'},
+  {role:'Sergeant',name:'—',badge:'br'},
+];
+const AGENDA_SECTIONS = [
+  {label:'Opening & Prepared Speeches',dur:'40 min',detail:'Speaker introductions, 2–3 prepared speeches with evaluations'},
+  {label:'Evaluation',dur:'10 min',detail:'General Evaluator summarises all evaluations'},
+  {label:'Break',dur:'10 min',detail:'Refreshments and networking'},
+  {label:'Table Topics',dur:'20 min',detail:'Topic Master runs impromptu speaking round'},
+  {label:'Activity Session',dur:'15 min',detail:'Activity Master leads group activity'},
+  {label:'Demo Speech',dur:'8 min',detail:'Demo speech by senior member or guest'},
+  {label:'Education Session',dur:'7 min',detail:'Educational segment on communication skills'},
+  {label:'Closing',dur:'10 min',detail:'Awards, announcements, close meeting'},
+];
+
+// ══ STATE ══
+let currentUser = null;
+let authMode = 'login';
+let authRole = 'member';
+let isDark = false;
+let members = [];
+let meetings = [];
+let attendance = {};
+let mentorMap = {};
+let nextId = 1;
+
+// ══ SPLASH / AUTH ══
+function showAuth() {
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('auth').style.display = 'flex';
+  }, 600);
+}
+function setRole(role, btn) {
+  authRole = role;
+  document.querySelectorAll('.role-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function toggleAuthMode() {
+  authMode = authMode === 'login' ? 'register' : 'login';
+  const r = authMode === 'register';
+  document.getElementById('auth-title').textContent = r ? 'Create account' : 'Welcome back';
+  document.getElementById('auth-sub').textContent = r ? 'Join the Gavel Club platform.' : 'Sign in to access the club platform.';
+  document.getElementById('auth-submit').textContent = r ? 'Create Account' : 'Sign In';
+  document.getElementById('reg-name').style.display = r ? '' : 'none';
+  document.getElementById('auth-toggle').innerHTML = r ? 'Already registered? <span onclick="toggleAuthMode()">Sign in</span>' : 'No account? <span onclick="toggleAuthMode()">Register</span>';
+}
+function doAuth() {
+  const email = document.getElementById('f-email').value.trim();
+  const pass = document.getElementById('f-pass').value;
+  if (!email || !pass) { toast('error','Missing fields','Please fill in email and password.'); return; }
+  let name = '';
+  if (authMode === 'register') {
+    name = document.getElementById('f-name').value.trim();
+    if (!name) { toast('error','Name required','Please enter your full name.'); return; }
+  } else {
+    name = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  }
+  currentUser = {name, role:authRole, initials:name.slice(0,2).toUpperCase()};
+  launchApp();
+}
+function launchApp() {
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('sb-av').textContent = currentUser.initials;
+  document.getElementById('sb-nm').textContent = currentUser.name;
+  document.getElementById('sb-rl').textContent = currentUser.ecRole || currentUser.role;
+  const isEC = currentUser.role === 'ec' || currentUser.role === 'president';
+  document.querySelectorAll('.ec-only').forEach(el => el.style.display = isEC ? '' : 'none');
+  const hr = new Date().getHours();
+  const g = hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  document.getElementById('dash-greeting').textContent = g + ', ' + currentUser.name.split(' ')[0];
+  buildAll();
+  nav('dashboard', document.querySelector('.sb-item'));
+}
+function doLogout() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth').style.display = 'flex';
+}
+
+// ══ BUILD ALL ══
+function buildAll() {
+  buildDashboard();
+  buildMembersGrid();
+  buildSpeechTable();
+  buildMeetingsTable();
+  buildRoleTable();
+  buildAttTable();
+  buildMentorDropdowns();
+  buildRoleAssignForm();
+  buildRecentReg();
+  buildMentorAssignments();
+  buildECSettingsForm();
+}
+
+// ══ NAV ══
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    document.querySelectorAll('.sb-item').forEach(i => {
+      if (i.getAttribute('onclick')?.includes("'"+id+"'")) i.classList.add('active');
+    });
+  }
+}
+
+// ══ DASHBOARD ══
+function buildDashboard() {
+  document.getElementById('ds-members').textContent = members.length;
+  const totalSpeeches = members.reduce((s,m) => s + m.speeches.filter(x=>x===1).length, 0);
+  document.getElementById('ds-speeches').textContent = totalSpeeches;
+  document.getElementById('ds-meetings').textContent = meetings.length;
+  document.getElementById('ds-att').textContent = members.length ? calcAvgAtt() + '%' : '—';
+
+  // Branch dist
+  const branches = {Miyapur:0,GHMC:0,MKR:0};
+  members.forEach(m => branches[m.branch]++);
+  const total = members.length;
+  document.getElementById('branch-dist').innerHTML = total === 0
+    ? '<div class="text-sm text-muted" style="padding:16px 0;text-align:center">No members yet. Register members to see distribution.</div>'
+    : Object.entries(branches).map(([b,c]) => {
+      const pct = Math.round(c/total*100);
+      return `<div style="margin-bottom:12px">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm fw6">${b}</span>
+          <span class="text-sm text-muted">${c} member${c!==1?'s':''} (${pct}%)</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+
+  // EC list
+  document.getElementById('ec-list').innerHTML = EC.map(e => `
+    <div class="flex items-center justify-between" style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div class="text-sm fw6">${e.name}</div>
+        <div class="text-xs text-muted">${e.role}</div>
+      </div>
+      <span class="badge ${e.badge}">${e.role.split(' ')[0]}</span>
+    </div>`).join('');
+
+  // Recent activity
+  document.getElementById('recent-acts').innerHTML = recentActivity.length === 0
+    ? '<div class="text-sm text-muted" style="padding:16px 0;text-align:center">No activity yet.</div>'
+    : recentActivity.slice(0,5).map(a => `
+      <div class="flex items-center gap-2" style="padding:9px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:1rem">${a.icon}</span>
+        <div style="flex:1"><div class="text-sm fw6">${a.text}</div></div>
+        <div class="text-xs text-muted">${a.time}</div>
+      </div>`).join('');
+
+  // Next meeting
+  const next = meetings.find(m => m.status === 'Upcoming');
+  document.getElementById('next-meeting').innerHTML = next ? `
+    <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:var(--r);padding:14px">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm fw6" style="color:var(--gold)">${next.branch} Branch</span>
+        <span class="badge bgold">Upcoming</span>
+      </div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text)">${formatDate(next.date)}</div>
+      <div class="text-xs text-muted mt-2">Speeches planned: ${next.speechNums.map(n=>'#'+n).join(', ')}</div>
+    </div>`
+    : '<div class="text-sm text-muted" style="padding:20px;text-align:center">No upcoming meetings scheduled.</div>';
+}
+
+function calcAvgAtt() {
+  const dates = Object.keys(attendance);
+  if (!dates.length || !members.length) return 0;
+  let total = 0;
+  dates.forEach(d => {
+    const p = Object.values(attendance[d]).filter(x=>x==='present').length;
+    total += Math.round(p/members.length*100);
+  });
+  return Math.round(total/dates.length);
+}
+
+// ══ RECENT ACTIVITY LOG ══
+let recentActivity = [];
+function logActivity(icon, text) {
+  recentActivity.unshift({icon, text, time:'just now'});
+  if (recentActivity.length > 20) recentActivity.pop();
+}
+
+// ══ MEMBERS ══
+let branchFilter = 'all';
+function filterBranch(b, btn) {
+  branchFilter = b;
+  document.querySelectorAll('.branch-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  buildMembersGrid();
+}
+function searchMembers(q) { buildMembersGrid(q); }
+function buildMembersGrid(search='') {
+  const list = members.filter(m =>
+    (branchFilter === 'all' || m.branch === branchFilter) &&
+    (!search || m.name.toLowerCase().includes(search.toLowerCase()) || m.school.toLowerCase().includes(search.toLowerCase()))
+  );
+  const colors = ['#C9A84C','#2A9D8F','#E63946','#2DC653','#F4A261','#8B5CF6','#EC4899','#0EA5E9','#F97316','#14B8A6'];
+  document.getElementById('members-grid').innerHTML = !list.length
+    ? `<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-title">${search ? 'No members match your search.' : 'No members registered yet.'}</div><div class="empty-state-sub">${search ? 'Try a different name or school.' : 'Use Register Member to add your first member.'}</div></div></div>`
+    : list.map((m,i) => {
+      const done = m.speeches.filter(x=>x===1).length;
+      const pct = Math.round(done/10*100);
+      return `<div class="member-card">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="mc-avatar" style="background:${colors[i%colors.length]}20;color:${colors[i%colors.length]}">${m.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
+          <div>
+            <div class="mc-name">${m.name}</div>
+            <div class="mc-detail">${m.cls} · ${m.school}</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="badge bb">${m.branch}</span>
+          <span class="text-xs text-muted">${done}/10 speeches</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+        ${m.mentor ? `<div class="text-xs text-muted mt-2">Mentor: <span style="font-weight:600;color:var(--text)">${m.mentor}</span></div>` : ''}
+        <div class="text-xs text-muted mt-1">📞 ${m.mobile}</div>
+      </div>`;
+    }).join('');
+}
+
+// ══ SPEECH TRACKER ══
+function speechSearch(q) {
+  if (!q) {
+    document.getElementById('speech-member-view').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎤</div><div class="empty-state-title">Select a member to view their speech progress</div></div>';
+    return;
+  }
+  const m = members.find(mb => mb.name.toLowerCase().includes(q.toLowerCase()));
+  if (m) showMemberSpeech(m);
+  else document.getElementById('speech-member-view').innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">No member found</div><div class="empty-state-sub">Try a different name.</div></div>';
+}
+function showMemberSpeech(m) {
+  const done = m.speeches.filter(x=>x===1).length;
+  const pct = Math.round(done/10*100);
+  document.getElementById('speech-member-view').innerHTML = `
+    <div class="card mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <div style="font-size:1.1rem;font-weight:600;color:var(--text)">${m.name}</div>
+          <div class="text-xs text-muted">${m.branch} · ${m.cls} · Mentor: ${m.mentor||'Unassigned'}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--gold)">${done}/10</div>
+          <div class="text-xs text-muted">speeches done</div>
+        </div>
+      </div>
+      <div class="prog-track mb-3" style="height:8px"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="speech-grid">
+        ${SPEECH_PROJECTS.map((sp,i) => {
+          const status = m.speeches[i]===1?'done':i===done?'active':'';
+          return `<div class="speech-cell ${status}" onclick="openSpeechModal(${m.id},${sp.num})">
+            <div class="sc-dot"></div>
+            <div class="sc-num">${sp.num}</div>
+            <div class="sc-lbl">${sp.title}</div>
+            <div class="text-xs text-muted mt-2">${sp.time}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+function buildSpeechTable() {
+  document.getElementById('speech-all-tbody').innerHTML = !members.length
+    ? '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3)">No members registered yet.</td></tr>'
+    : members.map(m => {
+      const done = m.speeches.filter(x=>x===1).length;
+      const pct = Math.round(done/10*100);
+      return `<tr>
+        <td class="td-bold">${m.name}</td>
+        <td><span class="badge bb">${m.branch}</span></td>
+        <td class="text-sm text-muted">${m.mentor||'—'}</td>
+        <td><div class="mini-prog"><div class="mini-track"><div class="mini-bar" style="width:${pct}%"></div></div><span class="text-xs text-muted">${pct}%</span></div></td>
+        <td>${done}/10</td>
+        <td><button class="btn btn-outline btn-sm" onclick="speechSearch('${m.name}');document.getElementById('speech-search-input').value='${m.name}'">View</button></td>
+      </tr>`;
+    }).join('');
+}
+function openSpeechModal(memberId, speechNum) {
+  const m = members.find(x=>x.id===memberId);
+  const sp = SPEECH_PROJECTS[speechNum-1];
+  const isDone = m.speeches[speechNum-1]===1;
+  document.getElementById('sm-title').textContent = `${m.name} — Speech ${speechNum}`;
+  document.getElementById('sm-body').innerHTML = `
+    <div class="flex items-center gap-2 mb-4"><span class="badge ${isDone?'bg':'ba'}">${isDone?'Completed':'Pending'}</span></div>
+    <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:var(--r);padding:14px;margin-bottom:16px">
+      <div class="text-xs text-muted mb-1">Project Focus</div>
+      <div style="font-size:1rem;font-weight:600;color:var(--text)">${sp.title}</div>
+      <div class="text-xs text-muted mt-1">Time: ${sp.time}</div>
+    </div>
+    <div class="fg"><label>Date Completed</label><input type="date" class="fi" id="sp-date" value="${isDone?new Date().toISOString().split('T')[0]:''}"></div>
+    <div class="fg"><label>Mentor for this Speech</label><input class="fi" id="sp-mentor" value="${m.mentor||''}" placeholder="Mentor name"></div>
+    <div class="fg"><label>Notes / Feedback</label><textarea class="fi fta" id="sp-notes" placeholder="Evaluator feedback…"></textarea></div>
+    <div class="flex gap-2 mt-3">
+      <button class="btn btn-gold" onclick="markSpeech(${memberId},${speechNum},true)">✓ Mark Completed</button>
+      <button class="btn btn-outline" onclick="markSpeech(${memberId},${speechNum},false)">○ Mark Pending</button>
+    </div>`;
+  document.getElementById('speech-overlay').classList.add('open');
+}
+function markSpeech(mid, snum, done) {
+  const m = members.find(x=>x.id===mid);
+  m.speeches[snum-1] = done?1:0;
+  closeModal();
+  buildSpeechTable();
+  showMemberSpeech(m);
+  logActivity('🎤', `${m.name} — Speech ${snum} marked ${done?'completed':'pending'}.`);
+  buildDashboard();
+  toast('success','Speech updated',`${m.name} — Speech ${snum} marked ${done?'completed':'pending'}.`);
+}
+
+// ══ MEETINGS ══
+function buildMeetingsTable() {
+  document.getElementById('meetings-tbody').innerHTML = !meetings.length
+    ? '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3)">No meetings planned yet. Use Meeting Agenda to plan one.</td></tr>'
+    : meetings.map(m => `<tr>
+      <td class="td-bold">${formatDate(m.date)}</td>
+      <td><span class="badge bb">${m.branch}</span></td>
+      <td>${m.speechNums.map(n=>'Speech '+n).join(', ')}</td>
+      <td>${Object.keys(m.roles).length}/${MEETING_ROLES.length}</td>
+      <td><span class="badge ${m.status==='Upcoming'?'bgold':m.status==='Completed'?'bg':'ba'}">${m.status}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="viewMeeting(${m.id})">View</button></td>
+    </tr>`).join('');
+}
+function viewMeeting(id) {
+  const m = meetings.find(x=>x.id===id);
+  document.getElementById('sm-title').textContent = `Meeting — ${formatDate(m.date)} — ${m.branch}`;
+  document.getElementById('sm-body').innerHTML = `
+    <div class="card-label mb-2">Assigned Roles</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+      ${MEETING_ROLES.map(r => `<div class="role-chip ${m.roles[r.name]?'filled':''}">
+        <strong>${r.code}</strong> ${r.name}${m.roles[r.name]?' — '+m.roles[r.name]:''}
+      </div>`).join('')}
+    </div>
+    <div class="card-label mb-2">Planned Speeches</div>
+    <div>${m.speechNums.map(n=>`<span class="badge bgold" style="margin:2px">Speech ${n} — ${SPEECH_PROJECTS[n-1].title}</span>`).join('')}</div>`;
+  document.getElementById('speech-overlay').classList.add('open');
+}
+function openNewMeeting() { nav('agenda',null); }
+
+// ══ ROLE TRACKER ══
+function buildRoleTable(filter='') {
+  const list = filter ? members.filter(m=>m.name.toLowerCase().includes(filter.toLowerCase())) : members;
+  document.getElementById('role-tbody').innerHTML = !list.length
+    ? '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--text3)">No members yet.</td></tr>'
+    : list.map(m => `<tr>
+      <td class="td-bold">${m.name}</td>
+      ${MEETING_ROLES.map(r => `<td><div class="role-count">${m.roleCounts[r.name]||0}</div></td>`).join('')}
+    </tr>`).join('');
+}
+function filterRoleTable(q) { buildRoleTable(q); }
+
+// ══ ATTENDANCE ══
+let attDate = new Date().toISOString().split('T')[0];
+document.addEventListener('DOMContentLoaded', () => {
+  const di = document.getElementById('att-date');
+  if (di) di.value = attDate;
+  buildAttTable();
+  buildAgendaTimeline();
+  buildRoleAssignForm();
+  const agDate = document.getElementById('ag-date');
+  if (agDate) agDate.value = new Date().toISOString().split('T')[0];
+});
+function loadAttDate() { attDate = document.getElementById('att-date').value; buildAttTable(); }
+function buildAttTable() {
+  if (!members.length) {
+    document.getElementById('att-tbody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3)">No members yet. Register members first.</td></tr>';
+    updateAttTotals({});
+    return;
+  }
+  if (!attendance[attDate]) {
+    attendance[attDate] = {};
+    members.forEach(m => attendance[attDate][m.id] = 'present');
+  }
+  const sess = attendance[attDate];
+  updateAttTotals(sess);
+  document.getElementById('att-tbody').innerHTML = members.map((m,i) => {
+    const s = sess[m.id] || 'present';
+    return `<tr>
+      <td class="text-muted text-xs">${i+1}</td>
+      <td class="td-bold">${m.name}</td>
+      <td><span class="badge bb">${m.branch}</span></td>
+      <td><button onclick="setAtt(${m.id},'present')" class="btn btn-sm" style="background:${s==='present'?'var(--green-light)':'var(--surface2)'};color:${s==='present'?'#18A43A':'var(--text3)'};border:1.5px solid ${s==='present'?'#86EFAC':'var(--border)'};margin-right:4px">✓ Present</button></td>
+      <td><button onclick="setAtt(${m.id},'informed')" class="btn btn-sm" style="background:${s==='informed'?'var(--amber-light)':'var(--surface2)'};color:${s==='informed'?'#C86A10':'var(--text3)'};border:1.5px solid ${s==='informed'?'var(--amber)':'var(--border)'}">~ Informed</button></td>
+      <td><button onclick="setAtt(${m.id},'absent')" class="btn btn-sm" style="background:${s==='absent'?'var(--red-light)':'var(--surface2)'};color:${s==='absent'?'#C0242F':'var(--text3)'};border:1.5px solid ${s==='absent'?'var(--red)':'var(--border)'}">✕ Absent</button></td>
+    </tr>`;
+  }).join('');
+}
+function setAtt(id, status) {
+  if (!attendance[attDate]) attendance[attDate] = {};
+  attendance[attDate][id] = status;
+  buildAttTable();
+}
+function markAllAtt(status) {
+  if (!attendance[attDate]) attendance[attDate] = {};
+  members.forEach(m => attendance[attDate][m.id] = status);
+  buildAttTable();
+}
+function updateAttTotals(sess) {
+  const vals = Object.values(sess);
+  document.getElementById('att-present').textContent = vals.filter(x=>x==='present').length;
+  document.getElementById('att-informed').textContent = vals.filter(x=>x==='informed').length;
+  document.getElementById('att-absent').textContent = vals.filter(x=>x==='absent').length;
+  document.getElementById('att-total').textContent = members.length;
+}
+function saveAtt() { toast('success','Attendance saved',`${formatDate(attDate)} attendance recorded.`); }
+
+// ══ REGISTER ══
+function buildMentorDropdowns() {
+  const seniors = members.filter(m => m.speeches.filter(x=>x===1).length >= 5);
+  ['r-mentor','ma-mentor'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Select mentor…</option>';
+    seniors.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.name;
+      o.textContent = s.name + ' (' + s.speeches.filter(x=>x===1).length + ' speeches)';
+      sel.appendChild(o);
+    });
+    if (!seniors.length) {
+      const o = document.createElement('option');
+      o.disabled = true;
+      o.textContent = 'No eligible mentors yet (need ≥5 speeches)';
+      sel.appendChild(o);
+    }
+  });
+  ['ma-junior'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Select member…</option>';
+    members.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.id;
+      o.textContent = m.name;
+      sel.appendChild(o);
+    });
+  });
+}
+function registerMember() {
+  const name = document.getElementById('r-name').value.trim();
+  const mobile = document.getElementById('r-mobile').value.trim();
+  const cls = document.getElementById('r-class').value.trim();
+  const school = document.getElementById('r-school').value.trim();
+  const branch = document.getElementById('r-branch').value;
+  if (!name || !mobile) { toast('error','Missing fields','Please fill in name and mobile.'); return; }
+  if (mobile.length < 10) { toast('error','Invalid mobile','Please enter a valid 10-digit number.'); return; }
+  const exists = members.find(m => m.mobile === mobile);
+  if (exists) { toast('error','Duplicate','A member with this mobile already exists.'); return; }
+  members.push({
+    id:nextId++, name, age:+document.getElementById('r-age').value||0,
+    gender:document.getElementById('r-gender').value, mobile, cls, school, branch,
+    mentor:document.getElementById('r-mentor').value,
+    parentName:document.getElementById('r-pname').value,
+    parentMobile:document.getElementById('r-pmobile').value,
+    parentAge:+document.getElementById('r-page').value||0,
+    parentGender:document.getElementById('r-pgender').value,
+    speeches:Array(10).fill(0),
+    roleCounts:Object.fromEntries(MEETING_ROLES.map(r=>[r.name,0])),
+    joinedDate:new Date().toISOString().split('T')[0]
+  });
+  logActivity('👤', `${name} registered in ${branch} branch.`);
+  toast('success','Member registered',name+' added to '+branch+' branch.');
+  ['r-name','r-age','r-mobile','r-class','r-school','r-pname','r-pmobile','r-page'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  buildAll();
+}
+function buildRecentReg() {
+  const recent = [...members].sort((a,b)=>b.joinedDate.localeCompare(a.joinedDate)).slice(0,5);
+  document.getElementById('recent-reg').innerHTML = !recent.length
+    ? '<div class="text-sm text-muted" style="padding:20px;text-align:center">No members registered yet.</div>'
+    : recent.map(m => `
+      <div class="flex items-center gap-3" style="padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="width:30px;height:30px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:var(--gold)">${m.name.slice(0,2).toUpperCase()}</div>
+        <div style="flex:1"><div class="text-sm fw6">${m.name}</div><div class="text-xs text-muted">${m.branch} · ${m.cls}</div></div>
+        <span class="badge bb">${m.branch}</span>
+      </div>`).join('');
+}
+
+// ══ MENTOR ASSIGN ══
+function assignMentor() {
+  const jid = +document.getElementById('ma-junior').value;
+  const mname = document.getElementById('ma-mentor').value;
+  if (!jid || !mname) { toast('error','Missing','Select both member and mentor.'); return; }
+  const m = members.find(x=>x.id===jid);
+  m.mentor = mname;
+  if (!mentorMap[jid]) mentorMap[jid] = {};
+  mentorMap[jid][document.getElementById('ma-speech').value] = mname;
+  logActivity('🤝', `${mname} assigned as mentor to ${m.name}.`);
+  toast('success','Mentor assigned',`${mname} assigned to ${m.name}.`);
+  buildMentorAssignments();
+  buildSpeechTable();
+}
+function buildMentorAssignments() {
+  const assigned = members.filter(m=>m.mentor);
+  document.getElementById('mentor-assignments').innerHTML = !assigned.length
+    ? '<div class="text-sm text-muted" style="padding:20px;text-align:center">No assignments yet.</div>'
+    : assigned.map(m=>`
+      <div class="flex items-center justify-between" style="padding:9px 0;border-bottom:1px solid var(--border)">
+        <div><div class="text-sm fw6">${m.name}</div><div class="text-xs text-muted">${m.branch}</div></div>
+        <div style="text-align:right"><div class="text-xs text-muted">Mentor</div><div class="text-sm fw6" style="color:var(--gold)">${m.mentor}</div></div>
+      </div>`).join('');
+}
+
+// ══ AGENDA / MEETING ══
+function buildRoleAssignForm() {
+  document.getElementById('role-assign-form').innerHTML = MEETING_ROLES.map(r => `
+    <div class="fg">
+      <label>${r.code} — ${r.name}</label>
+      <select class="fi" id="role-${r.code}">
+        <option value="">Assign member…</option>
+        ${members.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')}
+      </select>
+    </div>`).join('');
+}
+function saveMeeting() {
+  const date = document.getElementById('ag-date').value;
+  const branch = document.getElementById('ag-branch').value;
+  if (!date) { toast('error','Missing date','Please select a meeting date.'); return; }
+  const roles = {};
+  MEETING_ROLES.forEach(r => {
+    const v = document.getElementById('role-'+r.code)?.value;
+    if (v) roles[r.name] = v;
+  });
+  const newMeeting = {id:nextId++, date, branch, speechNums:[1], status:'Upcoming', roles, notes:''};
+  meetings.unshift(newMeeting);
+  logActivity('📅', `${branch} meeting planned for ${formatDate(date)}.`);
+  toast('success','Meeting saved',formatDate(date)+' — '+branch+' branch meeting planned.');
+  buildMeetingsTable();
+  buildDashboard();
+  nav('meetings',null);
+}
+function buildAgendaTimeline() {
+  let mins = 0;
+  const t = document.getElementById('agenda-timeline');
+  if (!t) return;
+  t.innerHTML = AGENDA_SECTIONS.map(s => {
+    const dur = parseInt(s.dur);
+    const hm = `${String(10+Math.floor(mins/60)).padStart(2,'0')}:${String(mins%60).padStart(2,'0')}`;
+    mins += dur;
+    return `<div class="tl-item">
+      <div class="tl-time">${hm}</div>
+      <div class="tl-content">
+        <div class="flex items-center justify-between">
+          <span class="tl-label">${s.label}</span>
+          <span class="tl-dur">${s.dur}</span>
+        </div>
+        <div class="tl-detail">${s.detail}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ MODAL ══
+function closeModal(e) {
+  if (!e || e.target.id==='speech-overlay' || e.target.classList.contains('modal-close')) {
+    document.getElementById('speech-overlay').classList.remove('open');
+  }
+}
+
+// ══ TOAST ══
+function toast(type, title, msg) {
+  const icons = {success:'✓',error:'✕',info:'i'};
+  const colors = {success:'var(--green-light)',error:'var(--red-light)',info:'var(--teal-light)'};
+  document.getElementById('t-icon').textContent = icons[type]||'i';
+  document.getElementById('t-icon').style.background = colors[type]||colors.info;
+  document.getElementById('t-title').textContent = title;
+  document.getElementById('t-msg').textContent = msg;
+  const el = document.getElementById('toast');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+// ══ THEME ══
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme',isDark?'dark':'light');
+  document.getElementById('theme-btn').textContent = isDark?'☀️ Light':'🌙 Dark';
+}
+
+// ══ EC SETTINGS ══
+function buildECSettingsForm() {
+  document.getElementById('ec-settings-form').innerHTML = EC.map((e,i) => `
+    <div class="fg">
+      <label>${e.role}</label>
+      <input class="fi" id="ec-input-${i}" value="${e.name === '—' ? '' : e.name}" placeholder="Enter name…">
+    </div>`).join('');
+  buildECPreview();
+}
+function saveECSettings() {
+  EC.forEach((e,i) => {
+    const val = document.getElementById('ec-input-'+i)?.value.trim();
+    e.name = val || '—';
+  });
+  buildECPreview();
+  buildDashboard();
+  toast('success','EC names saved','Dashboard updated with new committee names.');
+}
+function buildECPreview() {
+  document.getElementById('ec-preview').innerHTML = EC.map(e => `
+    <div class="flex items-center justify-between" style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div class="text-sm fw6">${e.name}</div>
+        <div class="text-xs text-muted">${e.role}</div>
+      </div>
+      <span class="badge ${e.badge}">${e.role.split(' ')[0]}</span>
+    </div>`).join('');
+}
+
+// ══ UTILS ══
+function formatDate(d) {
+  return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+}
+
+// Firebase connected via module below
+</script>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- FIREBASE — Connected to ylp-app-a57ee  -->
+<!-- ═══════════════════════════════════════ -->
+<script type="module">
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword,
+         signInWithEmailAndPassword, signOut,
+         onAuthStateChanged, updateProfile }      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc,
+         collection, addDoc, getDocs, updateDoc,
+         serverTimestamp, query, orderBy }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref,
+         uploadBytesResumable, getDownloadURL }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyDZIPiEmbtaImrRcnSZPvJdsORbFOjpWhY",
+  authDomain:        "ylp-app-a57ee.firebaseapp.com",
+  projectId:         "ylp-app-a57ee",
+  storageBucket:     "ylp-app-a57ee.firebasestorage.app",
+  messagingSenderId: "490498044838",
+  appId:             "1:490498044838:web:b8810cabd0944b5a741567"
+};
+
+const fbApp  = initializeApp(firebaseConfig);
+const auth   = getAuth(fbApp);
+const db     = getFirestore(fbApp);
+const storage= getStorage(fbApp);
+
+// ── Auto-login on page refresh ──
+onAuthStateChanged(auth, async (user) => {
+  if (user && !currentUser) {
+    await fbLoadUser(user);
+  }
+});
+
+// ── Load user profile + all data ──
+async function fbLoadUser(user) {
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  const data = snap.exists() ? snap.data() : {};
+  const name = user.displayName || data.name || user.email.split('@')[0];
+  const role = data.role || 'member';
+  currentUser = { name, role, initials: name.slice(0,2).toUpperCase(), uid: user.uid };
+  launchApp();
+  await fbLoadMembers();
+  await fbLoadMeetings();
+  await fbLoadAttendance();
+}
+
+// ── REAL AUTH: override doAuth ──
+window.doAuth = async function() {
+  const email = document.getElementById('f-email').value.trim();
+  const pass  = document.getElementById('f-pass').value;
+  if (!email || !pass) { toast('error','Missing','Please enter email and password.'); return; }
+  const btn = document.getElementById('auth-submit');
+  btn.textContent = authMode === 'register' ? 'Creating...' : 'Signing in...';
+  btn.disabled = true;
+  try {
+    if (authMode === 'register') {
+      const name = document.getElementById('f-name')?.value.trim()||'';
+      if (!name) { toast('error','Name required','Please enter your full name.'); btn.textContent='Create Account'; btn.disabled=false; return; }
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        name, email, role: authRole, joinedAt: serverTimestamp()
+      });
+      toast('success','Account created','Welcome, '+name+'!');
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
+    }
+  } catch(e) {
+    const msg =
+      e.code==='auth/user-not-found'||e.code==='auth/invalid-credential' ? 'Wrong email or password.' :
+      e.code==='auth/wrong-password'      ? 'Incorrect password.' :
+      e.code==='auth/email-already-in-use'? 'Email already registered.' :
+      e.code==='auth/invalid-email'       ? 'Invalid email address.' :
+      e.code==='auth/weak-password'       ? 'Password must be at least 6 characters.' :
+      'Error: ' + e.message;
+    toast('error','Sign in failed', msg);
+    btn.textContent = authMode==='register'?'Create Account':'Sign In';
+    btn.disabled = false;
+  }
+};
+
+// ── REAL LOGOUT ──
+window.doLogout = async function() {
+  await signOut(auth).catch(()=>{});
+  currentUser = null; members = []; meetings = []; attendance = {};
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth').style.display = 'flex';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-pass').value = '';
+};
+
+// ── LOAD MEMBERS ──
+async function fbLoadMembers() {
+  try {
+    const q = query(collection(db,'members'), orderBy('joinedDate'));
+    const snap = await getDocs(q);
+    members = [];
+    snap.forEach(d => {
+      const data = d.data();
+      members.push({ ...data, id: data.id || nextId++, _docId: d.id });
+    });
+    nextId = members.reduce((mx,m)=>Math.max(mx,m.id||0),0)+1;
+    buildAll();
+    toast('success','Synced', members.length+' members loaded from Firebase.');
+  } catch(e) { console.warn('Load members error:',e); }
+}
+
+// ── SAVE MEMBER ──
+window.fbSaveMember = async function(member) {
+  try {
+    if (member._docId) {
+      await updateDoc(doc(db,'members',member._docId), member);
+    } else {
+      const ref2 = await addDoc(collection(db,'members'), { ...member, joinedAt: serverTimestamp() });
+      member._docId = ref2.id;
+    }
+  } catch(e) { console.warn('Save member error:',e); }
+};
+
+// ── LOAD MEETINGS ──
+async function fbLoadMeetings() {
+  try {
+    const snap = await getDocs(query(collection(db,'meetings'), orderBy('date','desc')));
+    meetings = [];
+    snap.forEach(d => meetings.push({ ...d.data(), _docId: d.id }));
+    buildMeetingsTable(); buildDashboard();
+  } catch(e) { console.warn('Load meetings error:',e); }
+}
+
+// ── SAVE MEETING ──
+window.fbSaveMeeting = async function(meeting) {
+  try {
+    if (meeting._docId) {
+      await updateDoc(doc(db,'meetings',meeting._docId), meeting);
+    } else {
+      const ref2 = await addDoc(collection(db,'meetings'), { ...meeting, savedAt: serverTimestamp() });
+      meeting._docId = ref2.id;
+    }
+  } catch(e) { console.warn('Save meeting error:',e); }
+};
+
+// ── LOAD ATTENDANCE ──
+async function fbLoadAttendance() {
+  try {
+    const snap = await getDocs(collection(db,'attendance'));
+    attendance = {};
+    snap.forEach(d => { attendance[d.id] = d.data().records || {}; });
+    buildAttTable();
+  } catch(e) { console.warn('Load attendance error:',e); }
+}
+
+// ── SAVE ATTENDANCE ──
+window.fbSaveAtt = async function(date, records) {
+  try {
+    await setDoc(doc(db,'attendance',date), { records, savedAt: serverTimestamp(), savedBy: currentUser?.name });
+  } catch(e) { console.warn('Save attendance error:',e); }
+};
+
+// ── PATCH: registerMember → also save to Firestore ──
+const _origRegister = window.registerMember;
+window.registerMember = function() {
+  const before = members.length;
+  _origRegister();
+  if (members.length > before) {
+    const newM = members[members.length-1];
+    fbSaveMember(newM);
+  }
+};
+
+// ── PATCH: markSpeech → also update Firestore ──
+const _origMarkSpeech = window.markSpeech;
+window.markSpeech = function(mid, snum, done) {
+  _origMarkSpeech(mid, snum, done);
+  const m = members.find(x=>x.id===mid);
+  if (m) fbSaveMember(m);
+};
+
+// ── PATCH: saveAtt → also save to Firestore ──
+const _origSaveAtt = window.saveAtt;
+window.saveAtt = function() {
+  _origSaveAtt();
+  fbSaveAtt(attDate, attendance[attDate]||{});
+};
+
+// ── PATCH: saveMeeting → also save to Firestore ──
+const _origSaveMeeting = window.saveMeeting;
+window.saveMeeting = function() {
+  const before = meetings.length;
+  _origSaveMeeting();
+  if (meetings.length > before) fbSaveMeeting(meetings[0]);
+};
+
+// ── PATCH: saveECSettings → also save to Firestore ──
+window.saveECSettings = async function() {
+  EC.forEach((e,i) => {
+    const val = document.getElementById('ec-input-'+i)?.value.trim();
+    e.name = val||'—';
+  });
+  buildECPreview(); buildDashboard();
+  try {
+    await setDoc(doc(db,'settings','ec'), { EC, updatedAt: serverTimestamp() });
+  } catch(e) { console.warn('EC save error:',e); }
+  toast('success','EC names saved','Dashboard updated.');
+};
+
+// ── Load EC settings from Firestore ──
+async function fbLoadEC() {
+  try {
+    const snap = await getDoc(doc(db,'settings','ec'));
+    if (snap.exists() && snap.data().EC) {
+      snap.data().EC.forEach((saved,i) => { if(EC[i]) EC[i].name = saved.name; });
+      buildECPreview(); buildDashboard();
+    }
+  } catch(e) {}
+}
+fbLoadEC();
+
+console.log('✅ Firebase connected — PSS Miyapur Gavel Club (ylp-app-a57ee)');
+</script>
+
+</body>
+</html>
